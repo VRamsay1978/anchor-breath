@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Anchor Breath</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body {
+  background: #0b1220;
+  color: #e5e7eb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 18px;
+}
+
+.circle {
+  width: 180px;
+  height: 180px;
+  background: #60a5fa;
+  border-radius: 50%;
+  margin: 40px auto;
+  transition: transform 6s ease-in-out;
+}
+
+button {
+  width: 90%;
+  max-width: 320px;
+  background: #1f2937;
+  color: #e5e7eb;
+  border: 1px solid #374151;
+  padding: 14px;
+  margin: 8px auto;
+  border-radius: 14px;
+  font-size: 16px;
+  display: block;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #374151;
+}
+
+.hidden {
+  display: none;
+}
+
+small {
+  color: #9ca3af;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Anchor Breath</h1>
+<p id="instruction">Choose what feels right</p>
+
+<div class="circle" id="circle"></div>
+
+<div id="home">
+  <button onclick="startCalm()">🌊 Calm & Ground</button>
+  <button onclick="startSteady()">🧱 Safe & Steady</button>
+  <button onclick="startRelease()">🌬 Release Tension</button>
+  <button onclick="startReset()">🚨 Emergency Reset</button>
+</div>
+
+<div id="session" class="hidden">
+  <button onclick="pause()">Pause</button>
+  <button onclick="goHome()">End Session</button>
+</div>
+
+<small>You can stop at any time.</small>
+
+<script>
+let interval;
+const circle = document.getElementById("circle");
+const instruction = document.getElementById("instruction");
+const home = document.getElementById("home");
+const session = document.getElementById("session");
+
+function showSession() {
+  home.classList.add("hidden");
+  session.classList.remove("hidden");
+}
+
+function goHome() {
+  clearInterval(interval);
+  instruction.textContent = "Choose what feels right";
+  circle.style.transform = "scale(1)";
+  home.classList.remove("hidden");
+  session.classList.add("hidden");
+}
+
+function breathe(inText, outText, inScale, inTime, outTime) {
+  clearInterval(interval);
+  showSession();
+
+  function cycle() {
+    instruction.textContent = inText;
+    circle.style.transform = `scale(${inScale})`;
+
+    setTimeout(() => {
+      instruction.textContent = outText;
+      circle.style.transform = "scale(1)";
+    }, inTime);
+  }
+
+  cycle();
+  interval = setInterval(cycle, inTime + outTime);
+}
+
+function startCalm() {
+  breathe("Inhale gently", "Exhale slowly", 1.25, 5000, 7000);
+}
+
+function startSteady() {
+  breathe("Breathe in", "Breathe out", 1.2, 4000, 4000);
+}
+
+function startRelease() {
+  breathe("Inhale softly", "Release and let go", 1.2, 4000, 8000);
+}
+
+function startReset() {
+  clearInterval(interval);
+  showSession();
+  instruction.textContent = "Breathe in… when ready";
+  circle.style.transform = "scale(1.15)";
+
+  setTimeout(() => {
+    instruction.textContent = "Breathe out… slowly";
+    circle.style.transform = "scale(1)";
+  }, 5000);
+}
+
+function pause() {
+  clearInterval(interval);
+  instruction.textContent = "Paused — you’re in control";
+  circle.style.transform = "scale(1)";
+}
+</script>
+
+</body>
+</html>
