@@ -13,31 +13,58 @@ body {
   text-align: center;
   padding: 20px;
 }
-h1 { font-size: 26px; margin-bottom: 10px; }
-p { font-size: 18px; }
+
+h1 {
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 18px;
+}
+
 .circle {
-  width: 180px; height: 180px;
+  width: 180px;
+  height: 180px;
   background: #60a5fa;
   border-radius: 50%;
   margin: 40px auto;
   transition: transform 6s ease-in-out;
 }
+
 button {
-  width: 90%; max-width: 320px;
-  background: #1f2937; color: #e5e7eb;
+  width: 90%;
+  max-width: 320px;
+  background: #1f2937;
+  color: #e5e7eb;
   border: 1px solid #374151;
-  padding: 14px; margin: 8px auto;
-  border-radius: 14px; font-size: 16px;
+  padding: 14px;
+  margin: 8px auto;
+  border-radius: 14px;
+  font-size: 16px;
   display: block;
+  cursor: pointer;
 }
-.hidden { display: none; }
-small { color: #9ca3af; }
+
+button:hover {
+  background: #374151;
+}
+
+.hidden {
+  display: none;
+}
+
+small {
+  color: #9ca3af;
+}
 </style>
 </head>
 
 <body>
+
 <h1>Anchor Breath</h1>
 <p id="instruction">Choose what feels right</p>
+
 <div class="circle" id="circle"></div>
 
 <div id="home">
@@ -56,6 +83,7 @@ small { color: #9ca3af; }
 
 <script>
 let timer;
+
 const circle = document.getElementById("circle");
 const instruction = document.getElementById("instruction");
 const home = document.getElementById("home");
@@ -65,6 +93,7 @@ function showSession() {
   home.classList.add("hidden");
   session.classList.remove("hidden");
 }
+
 function goHome() {
   clearTimeout(timer);
   instruction.textContent = "Choose what feels right";
@@ -72,39 +101,83 @@ function goHome() {
   home.classList.remove("hidden");
   session.classList.add("hidden");
 }
+
 function breathe(inText, outText, inScale, inTime, outTime) {
   clearTimeout(timer);
   showSession();
+
   function inhale() {
     instruction.textContent = inText;
     circle.style.transform = `scale(${inScale})`;
     timer = setTimeout(exhale, inTime);
   }
+
   function exhale() {
     instruction.textContent = outText;
     circle.style.transform = "scale(1)";
     timer = setTimeout(inhale, outTime);
   }
+
   inhale();
 }
-function startCalm() { breathe("Inhale gently", "Exhale slowly", 1.25, 5000, 7000); }
-function startSteady() { breathe("Breathe in", "Breathe out", 1.2, 4000, 4000); }
-function startRelease() { breathe("Inhale softly", "Release and let go", 1.2, 4000, 8000); }
+
+/* MODES */
+
+function startCalm() {
+  breathe(
+    "Breathing in gently",
+    "Breathing out, unhurried",
+    1.25,
+    5000,
+    7000
+  );
+}
+
+function startSteady() {
+  breathe(
+    "Breathing in",
+    "Breathing out",
+    1.2,
+    4000,
+    4000
+  );
+}
+
+function startRelease() {
+  breathe(
+    "Breathing in softly",
+    "Breathing out and letting the stress go",
+    1.2,
+    4000,
+    8000
+  );
+}
+
 function startReset() {
   clearTimeout(timer);
   showSession();
-  instruction.textContent = "Breathe in… when ready";
-  circle.style.transform = "scale(1.15)";
-  timer = setTimeout(() => {
-    instruction.textContent = "Breathe out… slowly";
+
+  function inhale() {
+    instruction.textContent = "If it feels okay, breathe in";
+    circle.style.transform = "scale(1.15)";
+    timer = setTimeout(exhale, 5000);
+  }
+
+  function exhale() {
+    instruction.textContent = "Let the breath move out";
     circle.style.transform = "scale(1)";
-  }, 5000);
+    timer = setTimeout(inhale, 7000);
+  }
+
+  inhale();
 }
+
 function pause() {
   clearTimeout(timer);
-  instruction.textContent = "Paused — you’re in control";
+  instruction.textContent = "Paused — you can stay here";
   circle.style.transform = "scale(1)";
 }
 </script>
+
 </body>
 </html>
